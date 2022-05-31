@@ -1,0 +1,159 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- Schema Mokkivarausdb
+
+-- Schema Mokkivarausdb
+
+CREATE SCHEMA IF NOT EXISTS Mokkivarausdb DEFAULT CHARACTER SET utf8 ;
+USE Mokkivarausdb ;
+
+-- Table Mokkivarausdb.alue
+
+CREATE TABLE IF NOT EXISTS Mokkivarausdb.alue (
+alue_id INT NOT NULL AUTO_INCREMENT,
+nimi VARCHAR(40) NULL,
+PRIMARY KEY (alue_id))
+ENGINE = InnoDB;
+
+-- Table Mokkivarausdb.posti
+
+CREATE TABLE IF NOT EXISTS Mokkivarausdb.posti (
+postinro CHAR(5) NOT NULL,
+toimipaikka VARCHAR(45) NULL,
+PRIMARY KEY (postinro))
+ENGINE = InnoDB;
+
+-- Table Mokkivarausdb.mokki
+
+CREATE TABLE IF NOT EXISTS Mokkivarausdb.mokki (
+mokki_id INT NOT NULL AUTO_INCREMENT,
+alue_id INT NOT NULL,
+postinro CHAR(5) NOT NULL,
+mokkinimi VARCHAR(45) NULL,
+katuosoite VARCHAR(45) NULL,
+hinta DOUBLE(8,2) NULL,
+kuvaus VARCHAR(150) NULL,
+henkilomaara INT NULL,
+varustelu VARCHAR(100) NULL,
+PRIMARY KEY (mokki_id),
+INDEX fk_mokki_alue_idx (alue_id ASC) VISIBLE,
+INDEX fk_mokki_posti1_idx (postinro ASC) VISIBLE,
+CONSTRAINT fk_mokki_alue
+FOREIGN KEY (alue_id)
+REFERENCES Mokkivarausdb.alue (alue_id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION,
+CONSTRAINT fk_mokki_posti1
+FOREIGN KEY (postinro)
+REFERENCES Mokkivarausdb.posti (postinro)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+-- Table Mokkivarausdb.palvelu
+
+CREATE TABLE IF NOT EXISTS Mokkivarausdb.palvelu (
+palvelu_id INT NOT NULL AUTO_INCREMENT,
+alue_id INT NOT NULL,
+nimi VARCHAR(40) NULL,
+tyyppi INT NULL,
+kuvaus VARCHAR(255) NULL,
+hinta DOUBLE(8,2) NULL,
+alv DOUBLE(8,2) NULL,
+PRIMARY KEY (palvelu_id),
+INDEX fk_palvelu_alue1_idx (alue_id ASC) VISIBLE,
+CONSTRAINT fk_palvelu_alue1
+FOREIGN KEY (alue_id)
+REFERENCES Mokkivarausdb.alue (alue_id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+-- Table Mokkivarausdb.asiakas
+
+CREATE TABLE IF NOT EXISTS Mokkivarausdb.asiakas (
+asiakas_id INT NOT NULL AUTO_INCREMENT,
+postinro CHAR(5) NOT NULL,
+etunimi VARCHAR(20) NULL,
+sukunimi VARCHAR(40) NULL,
+lahiosoite VARCHAR(40) NULL,
+email VARCHAR(50) NULL,
+puhelinnro VARCHAR(15) NULL,
+PRIMARY KEY (asiakas_id),
+INDEX fk_asiakas_posti1_idx (postinro ASC) VISIBLE,
+CONSTRAINT fk_asiakas_posti1
+FOREIGN KEY (postinro)
+REFERENCES Mokkivarausdb.posti (postinro)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+-- Table Mokkivarausdb.varaus
+
+CREATE TABLE IF NOT EXISTS Mokkivarausdb.varaus (
+varaus_id INT NOT NULL AUTO_INCREMENT,
+asiakas_id INT NOT NULL,
+mokki_mokki_id INT NOT NULL,
+varattu_pvm DATETIME NULL,
+vahvistus_pvm DATETIME NULL,
+varattu_alkupvm DATETIME NULL,
+varattu_loppupvm DATETIME NULL,
+PRIMARY KEY (varaus_id),
+INDEX fk_varaus_mokki1_idx (mokki_mokki_id ASC) VISIBLE,
+INDEX fk_varaus_asiakas1_idx (asiakas_id ASC) VISIBLE,
+CONSTRAINT fk_varaus_mokki1
+FOREIGN KEY (mokki_mokki_id)
+REFERENCES Mokkivarausdb.mokki (mokki_id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION,
+CONSTRAINT fk_varaus_asiakas1
+FOREIGN KEY (asiakas_id)
+REFERENCES Mokkivarausdb.asiakas (asiakas_id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+-- Table Mokkivarausdb.varauksen_palvelut
+
+CREATE TABLE IF NOT EXISTS Mokkivarausdb.varauksen_palvelut (
+palvelu_id INT NOT NULL AUTO_INCREMENT,
+varaus_id INT NOT NULL,
+lkm INT NULL,
+PRIMARY KEY (palvelu_id, varaus_id),
+INDEX fk_palvelu_has_varaus_varaus1_idx (varaus_id ASC) VISIBLE,
+INDEX fk_palvelu_has_varaus_palvelu1_idx (palvelu_id ASC) VISIBLE,
+CONSTRAINT fk_palvelu_has_varaus_palvelu1
+FOREIGN KEY (palvelu_id)
+REFERENCES Mokkivarausdb.palvelu (palvelu_id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION,
+CONSTRAINT fk_palvelu_has_varaus_varaus1
+FOREIGN KEY (varaus_id)
+REFERENCES Mokkivarausdb.varaus (varaus_id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+-- Table Mokkivarausdb.lasku
+
+CREATE TABLE IF NOT EXISTS Mokkivarausdb.lasku (
+lasku_id INT NOT NULL AUTO_INCREMENT,
+varaus_id INT NOT NULL,
+summa DOUBLE(8,2) NULL,
+alv DOUBLE(8,2) NULL,
+PRIMARY KEY (lasku_id),
+INDEX fk_lasku_varaus1_idx (varaus_id ASC) VISIBLE,
+CONSTRAINT fk_lasku_varaus1
+FOREIGN KEY (varaus_id)
+REFERENCES Mokkivarausdb.varaus (varaus_id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

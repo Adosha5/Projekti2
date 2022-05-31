@@ -1,0 +1,20 @@
+{
+  "name": "projekti2-mokinvarausjarjestelma",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://sav-cod22k-groubD@dev.azure.com/sav-cod22k-groubD/Projekti2-M%C3%B6kinvarausj%C3%A4rjestelm%C3%A4/_git/Projekti2-M%C3%B6kinvarausj%C3%A4rjestelm%C3%A4"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@mui/icons-material": "^5.5.1",
+    "express": "^4.17.3"
+  }
+}
