@@ -1,4 +1,4 @@
-Savonia Code Academy -diplomikoulutuksen osana tehty projektityö. Työryhmässä Anni-Maarit Sonninen ja kaksi muuta SCA3-opiskelijaa.
+Savonia Code Academy -diplomikoulutuksen osana tehty projektityö. Työryhmässä Anni-Maarit Sonninen ja kaksi muuta SCA3-opiskelijaa. Projekti toteutettiin 03-04/2022.
 
 Projektin tavoitteena oli toteuttaa lomamökkien varausjärjestelmä, jonka avulla tilaaja Village People Oy (kuvitteellinen yritys) voi hallinnoida eri toimipisteissä sijaitsevien lomamökkien ja lisäpalvelujen varauksia. Lisäksi järjestelmässä oli tarkoitus hallinnoida asiakastietoja. Projektin tavoitteena oli toteuttaa selainpohjainen järjestelmä, joka tallentaa datan tietokantaan REST-rajapinnan kautta.
 
