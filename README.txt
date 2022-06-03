@@ -19,3 +19,8 @@ Omat vastuualueeni projektin toteuttamisessa:
 - Material UI
 - tietokannan lisäyslauseet
 - projektisuunnitelman ja projektin loppuraportin kirjoittaminen
+
+Sovelluksen käynnistys:
+- Asenna npm pääkansiossa sekä client ja server-kansioissa
+- Käynnistä serveri server-kansiossa: nodemon start
+- Käynnistä client client-kansiossa: npm start
